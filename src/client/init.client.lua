@@ -1,1 +1,1 @@
-print("Hello world, from client!")
+local x = 5
