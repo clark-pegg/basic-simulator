@@ -1,0 +1,30 @@
+{
+  "name": "basic-simulator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "rbxtsc",
+    "watch": "rbxtsc -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Clark-Pegg/basic-simulator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Clark-Pegg/basic-simulator/issues"
+  },
+  "homepage": "https://github.com/Clark-Pegg/basic-simulator#readme",
+  "devDependencies": {
+    "@rbxts/compiler-types": "^1.3.3-types.1",
+    "@rbxts/types": "^1.0.582",
+    "typescript": "^4.6.3"
+  },
+  "dependencies": {
+    "@rbxts/roact": "^1.4.2-ts.0",
+    "@rbxts/services": "^1.2.0"
+  }
+}
