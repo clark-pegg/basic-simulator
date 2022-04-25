@@ -1,19 +1,15 @@
 {
   "name": "basic-simulator",
   "version": "1.0.0",
-  "description": "",
+  "description": "basic ROBLOX simulator",
   "main": "index.js",
-  "scripts": {
-    "build": "rbxtsc",
-    "watch": "rbxtsc -w"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Clark-Pegg/basic-simulator.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Clark Pegg",
+  "license": "Unlicense",
   "bugs": {
     "url": "https://github.com/Clark-Pegg/basic-simulator/issues"
   },
