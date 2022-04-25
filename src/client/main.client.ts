@@ -1,3 +1,3 @@
-import { makeHello } from "shared/module";
+import { ReplicatedStorage } from "@rbxts/services";
 
-print(makeHello("main.client.ts"));
+print(ReplicatedStorage);
