@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Package Setup + Build
+        run: -|
+          npm ci;
+          npm run build;
+
+      - name: Rojo Setup + Build
+        run: -|
+          curl -sL $(curl https://api.github.com/repos/rojo-rbx/rojo/releases/latest | grep "browser_download_url" | grep "linux" | awk '{print $2}' | sed 's|[\"\,]||g') > rojo.zip;
+          unzip rojo.zip;
+          chmod +x rojo;
+          ./rojo build -o build.rbxl;
