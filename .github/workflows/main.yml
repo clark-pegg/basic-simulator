@@ -17,6 +17,7 @@ jobs:
 
       - name: Package Setup + Build
         run: -|
+          npm install -g roblox-ts;
           npm ci;
           npm run build;
 
