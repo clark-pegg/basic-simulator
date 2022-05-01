@@ -1,36 +1,32 @@
-import { CreateDefinitions, Definitions, Middleware } from "@rbxts/net";
+import { ReplicatedStorage } from "@rbxts/services";
+import Net from "@rbxts/net";
 
-export const Remotes = CreateDefinitions({
-  // Sells a player's clicks and returns new value
-  // NOTE: Player's position will be checked before sell is allowed
-  SubmitSell: Definitions.ServerAsyncFunction<() => number>([
-    Middleware.RateLimit({
+const DistanceMiddleware: Net.Middleware = (nextMiddleware, instance) => {
+  return (sender, ...args) => {
+    const distance = sender.Character?.PrimaryPart?.Position.Magnitude;
+
+    if (distance && distance <= 50) {
+      return nextMiddleware(sender, ...args);
+    }
+  };
+};
+
+export = Net.CreateDefinitions({
+  // Returns new money on success, -1 on failure
+  SubmitSell: Net.Definitions.ServerAsyncFunction<() => number>([
+    Net.Middleware.RateLimit({
+      MaxRequestsPerMinute: 600,
+    }),
+    DistanceMiddleware,
+  ]),
+
+  // Returns new clicks on success, -1 on failure
+  SubmitClick: Net.Definitions.ServerAsyncFunction<() => number>([
+    Net.Middleware.RateLimit({
       MaxRequestsPerMinute: 600,
     }),
   ]),
-  // Updates a players clicks and returns new value
-  SubmitClick: Definitions.ServerAsyncFunction<() => number>([
-    Middleware.RateLimit({
-      // limit at 10 clicks per second, client will warn user
-      // in normal use, this is just an added layer to stop exploiters
-      MaxRequestsPerMinute: 600,
-    }),
-  ]),
-  // Player request to change equipped item at index
-  EquipBag: Definitions.ServerAsyncFunction<(index: number) => boolean>(),
-  EquipClicker: Definitions.ServerAsyncFunction<(index: number) => boolean>(),
-  // Player requsts to buy items
-  BuyBag: Definitions.ServerAsyncFunction<(name: string) => boolean>(),
-  BuyClicker: Definitions.ServerAsyncFunction<(name: string) => boolean>(),
-  // Get current equipped items
-  GetEquippedBag: Definitions.ServerAsyncFunction<() => number>(),
-  GetEquippedClicker: Definitions.ServerAsyncFunction<() => number>(),
-  // Get all items in inventory
-  GetAllBags:
-    Definitions.ServerAsyncFunction<() => { [key: string]: [string, number] }>(),
-  GetAllClickers:
-    Definitions.ServerAsyncFunction<() => { [key: string]: [string, number] }>(),
-  // Returns a players stats
-  GetClicks: Definitions.ServerAsyncFunction<() => number>(),
-  GetMoney: Definitions.ServerAsyncFunction<() => number>(),
 });
+
+// maybe do this better... I don't like the client relying on a explicit
+// server return... what to do...

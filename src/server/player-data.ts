@@ -1,56 +1,29 @@
-import { Bag, NewBag } from "server/bag";
-import { Clicker, NewClicker } from "server/clicker";
-import { Remotes } from "shared/remotes";
+export type Bag = Readonly<{ price: number; storage: number }>;
+
+export const BagMap: Map<string, Bag> = new Map<string, Bag>([
+  ["basic", { price: 0, storage: 10 }],
+  ["wooden", { price: 100, storage: 100 }],
+  ["stone", { price: 1_000, storage: 1_000 }],
+  ["iron", { price: 10_000, storage: 10_000 }],
+  ["diamond", { price: 100_000, storage: 100_000 }],
+]);
+
+export type Clicker = Readonly<{ price: number; power: number }>;
+
+export const ClickerMap: Map<string, Clicker> = new Map<string, Clicker>([
+  ["basic", { price: 0, power: 1 }],
+  ["wooden", { price: 100, power: 5 }],
+  ["stone", { price: 1_000, power: 25 }],
+  ["iron", { price: 10_000, power: 125 }],
+  ["diamond", { price: 100_000, power: 625 }],
+]);
 
 export type PlayerData = Readonly<{
   money: number;
   clicks: number;
-  bags: ReadonlyMap<string, Bag>;
-  clickers: ReadonlyMap<string, Clicker>;
+  bags: ReadonlyArray<Bag>;
+  clickers: ReadonlyArray<Clicker>;
   equipped: [Bag, Clicker];
 }>;
 
-export const NewPlayerData = (): PlayerData => {
-  return {
-    money: 0,
-    clicks: 0,
-    bags: new Map<string, Bag>(),
-    clickers: new Map<string, Clicker>(),
-    equipped: [NewBag(0, 10), NewClicker(0, 2)],
-  };
-};
-
-export const PlayerDataMap = new Map<string, PlayerData>();
-
-Remotes.Server.OnFunction("SubmitClick", (player: Player): number => {
-  const data: PlayerData | undefined = PlayerDataMap.get(player.Name);
-
-  if (!data) return -1;
-
-  PlayerDataMap.set(player.Name, {
-    money: data.money,
-    clicks: math.min(data.clicks + data.equipped[1].power, data.equipped[0].storage),
-    bags: data.bags,
-    clickers: data.clickers,
-    equipped: data.equipped,
-  });
-
-  return math.min(data.clicks + data.equipped[1].power, data.equipped[0].storage);
-});
-
-Remotes.Server.OnFunction("SubmitSell", (player: Player): number => {
-  const data: PlayerData | undefined = PlayerDataMap.get(player.Name);
-  const distance: number | undefined = player.Character?.PrimaryPart?.Position?.Magnitude;
-
-  if (!data || !distance || distance > 50) return -1;
-
-  PlayerDataMap.set(player.Name, {
-    money: data.money + data.clicks,
-    clicks: 0,
-    bags: data.bags,
-    clickers: data.clickers,
-    equipped: data.equipped,
-  });
-
-  return data.money + data.clicks;
-});
+export const PlayerDataMap: Map<Player, PlayerData> = new Map<Player, PlayerData>();
