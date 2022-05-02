@@ -28,6 +28,14 @@
       "$className": "Workspace",
       "$properties": {
         "FilteringEnabled": true
+      },
+      "Baseplate": {
+        "$className": "Part",
+        "$properties": {
+          "Position": [0, 0, 0],
+          "Size": [100, 1, 100],
+          "Anchored": true
+        }
       }
     },
     "HttpService": {

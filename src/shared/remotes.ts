@@ -1,13 +1,20 @@
 import { ReplicatedStorage } from "@rbxts/services";
 import Net from "@rbxts/net";
 
-const DistanceMiddleware: Net.Middleware = (nextMiddleware, instance) => {
-  return (sender, ...args) => {
-    const distance = sender.Character?.PrimaryPart?.Position.Magnitude;
+const DistanceMiddleware = (info: {
+  Location: Vector3;
+  Distance: number;
+}): Net.Middleware => {
+  return (nextMiddleware, instance) => {
+    return (sender, ...args) => {
+      const position = sender.Character?.PrimaryPart?.Position;
 
-    if (distance && distance <= 50) {
-      return nextMiddleware(sender, ...args);
-    }
+      if (position) {
+        if (position.sub(info.Location).Magnitude <= info.Distance) {
+          return nextMiddleware(sender, ...args);
+        }
+      }
+    };
   };
 };
 
@@ -17,7 +24,10 @@ export = Net.CreateDefinitions({
     Net.Middleware.RateLimit({
       MaxRequestsPerMinute: 600,
     }),
-    DistanceMiddleware,
+    DistanceMiddleware({
+      Location: new Vector3(0, 0, 0),
+      Distance: 50,
+    }),
   ]),
 
   // Returns new clicks on success, -1 on failure
