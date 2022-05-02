@@ -15,6 +15,12 @@
           "$path": "node_modules/@rbxts"
         }
       },
+      "networking": {
+        "$path": "out/networking",
+        "remotes": {
+          "$className": "Folder"
+        }
+      },
       "$path": "out/shared"
     },
     "StarterPlayer": {
@@ -33,7 +39,7 @@
         "$className": "Part",
         "$properties": {
           "Position": [0, 0, 0],
-          "Size": [100, 1, 100],
+          "Size": [250, 1, 250],
           "Anchored": true
         }
       }
