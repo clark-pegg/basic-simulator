@@ -3,13 +3,4 @@ import Remotes from "shared/remotes";
 
 UserInputService.InputBegan.Connect(async (input, processed) => {
   if (processed) return;
-
-  Remotes.CallServerFunction("SubmitPotato", [Players.LocalPlayer]).then(
-    (value: string) => {
-      print(value);
-    },
-    (reason: any) => {
-      print(reason);
-    }
-  );
 });

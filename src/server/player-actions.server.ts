@@ -1,4 +1,4 @@
-import { Players, ReplicatedStorage } from "@rbxts/services";
+import { Players } from "@rbxts/services";
 import { Bag, Clicker, PlayerData, PlayerDataMap } from "server/player-data";
 import Remotes from "shared/remotes";
 
@@ -14,12 +14,3 @@ Players.PlayerAdded.Connect((player: Player) => {
     ],
   });
 });
-
-Remotes.SetCallback(
-  "SubmitPotato",
-  (player: Player) =>
-    new Promise<string>((resolve, reject) => {
-      print(player);
-      resolve("Potato");
-    })
-);

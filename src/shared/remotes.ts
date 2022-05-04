@@ -1,15 +1,8 @@
-import {
-  CreateDefinitions,
-  CreateServerFunction,
-  CreateServerEvent,
-  CreateClientEvent,
-} from "networking/manager";
+import Net from "@rbxts/net";
 
-const Remotes = CreateDefinitions({
-  SubmitClick: CreateServerFunction<() => number>(),
-  SubmitPotato: CreateServerFunction<() => string>(),
-  CallServer: CreateServerEvent<[message: string]>(),
-  CallClient: CreateClientEvent<[message: string]>()
+const Remotes = Net.CreateDefinitions({
+  SubmitClick: Net.Definitions.ServerAsyncFunction<() => number>(),
+  SubmitSell: Net.Definitions.ServerAsyncFunction<() => number>(),
 });
 
 export = Remotes;
