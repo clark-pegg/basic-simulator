@@ -1,6 +1,15 @@
-import { CreateDefinitions } from "networking/manager";
+import {
+  CreateDefinitions,
+  CreateServerFunction,
+  CreateServerEvent,
+  CreateClientEvent,
+} from "networking/manager";
 
-export const Remotes = CreateDefinitions({
-  SubmitClick: "RemoteFunction",
-  SubmitSell: "RemoteFunction",
+const Remotes = CreateDefinitions({
+  SubmitClick: CreateServerFunction<() => number>(),
+  SubmitPotato: CreateServerFunction<() => string>(),
+  CallServer: CreateServerEvent<[message: string]>(),
+  CallClient: CreateClientEvent<[message: string]>()
 });
+
+export = Remotes;

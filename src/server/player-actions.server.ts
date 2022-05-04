@@ -1,6 +1,6 @@
 import { Players, ReplicatedStorage } from "@rbxts/services";
 import { Bag, Clicker, PlayerData, PlayerDataMap } from "server/player-data";
-import { Remotes } from "shared/remotes";
+import Remotes from "shared/remotes";
 
 Players.PlayerAdded.Connect((player: Player) => {
   PlayerDataMap.set(player, {
@@ -15,8 +15,11 @@ Players.PlayerAdded.Connect((player: Player) => {
   });
 });
 
-const potato = Remotes.Get("SubmitClick") as RemoteFunction;
-
-potato.OnServerInvoke = (player: Player) => {
-  print(player);
-};
+Remotes.SetCallback(
+  "SubmitPotato",
+  (player: Player) =>
+    new Promise<string>((resolve, reject) => {
+      print(player);
+      resolve("Potato");
+    })
+);
