@@ -1,5 +1,5 @@
-import { BadgeService, Players } from "@rbxts/services";
-import { Bag, Clicker, PlayerData, PlayerDataMap } from "server/player-data";
+import { Players } from "@rbxts/services";
+import { Bag, BagMap, Clicker, ClickerMap, PlayerDataMap } from "server/player-data";
 import Remotes from "shared/remotes";
 
 Players.PlayerAdded.Connect((player: Player) => {
@@ -52,4 +52,48 @@ Remotes.Server.OnFunction("SubmitSell", (player: Player) => {
   });
 
   return newMoney;
+});
+
+Remotes.Server.OnFunction("BuyBag", (player: Player, name: string) => {
+  const data = PlayerDataMap.get(player);
+
+  if (!data) error("Couldn't find data!");
+
+  const bag = BagMap.get(name);
+
+  if (!bag) error("Couldn't find bag!");
+
+  if (data.money < bag.price) return false;
+
+  PlayerDataMap.set(player, {
+    money: data.money - bag.price,
+    clicks: data.clicks,
+    bags: [...data.bags, bag],
+    clickers: data.clickers,
+    equipped: data.equipped,
+  });
+
+  return true;
+});
+
+Remotes.Server.OnFunction("BuyClicker", (player: Player, name: string) => {
+  const data = PlayerDataMap.get(player);
+
+  if (!data) error("Couldn't find data!");
+
+  const clicker = ClickerMap.get(name);
+
+  if (!clicker) error("Couldn't find bag!");
+
+  if (data.money < clicker.price) return false;
+
+  PlayerDataMap.set(player, {
+    money: data.money - clicker.price,
+    clicks: data.clicks,
+    bags: data.bags,
+    clickers: [...data.clickers, clicker],
+    equipped: data.equipped,
+  });
+
+  return true;
 });
