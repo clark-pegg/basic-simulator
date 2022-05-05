@@ -16,9 +16,7 @@ Players.PlayerAdded.Connect((player: Player) => {
 });
 
 Remotes.Server.OnFunction("SubmitClick", (player: Player) => {
-  const data = PlayerDataMap.get(player);
-
-  if (!data) error("Couldn't find data!");
+  const data = PlayerDataMap.get(player) ?? error("Couldn't find data!");
 
   const newClicks = math.min(
     data.clicks + data.equipped[1].power,
@@ -37,9 +35,7 @@ Remotes.Server.OnFunction("SubmitClick", (player: Player) => {
 });
 
 Remotes.Server.OnFunction("SubmitSell", (player: Player) => {
-  const data = PlayerDataMap.get(player);
-
-  if (!data) error("Couldn't find data!");
+  const data = PlayerDataMap.get(player) ?? error("Couldn't find data!");
 
   const newMoney = data.money + data.clicks;
 
@@ -55,11 +51,8 @@ Remotes.Server.OnFunction("SubmitSell", (player: Player) => {
 });
 
 Remotes.Server.OnFunction("BuyBag", (player: Player, name: string) => {
-  const data = PlayerDataMap.get(player);
-
-  if (!data) error("Couldn't find data!");
-
-  const bag = BagMap.get(name);
+  const data = PlayerDataMap.get(player) ?? error("Couldn't find data!");
+  const bag = BagMap.get(name) ?? error("Couldn't find bag!");
 
   if (!bag) error("Couldn't find bag!");
 
@@ -77,13 +70,8 @@ Remotes.Server.OnFunction("BuyBag", (player: Player, name: string) => {
 });
 
 Remotes.Server.OnFunction("BuyClicker", (player: Player, name: string) => {
-  const data = PlayerDataMap.get(player);
-
-  if (!data) error("Couldn't find data!");
-
-  const clicker = ClickerMap.get(name);
-
-  if (!clicker) error("Couldn't find bag!");
+  const data = PlayerDataMap.get(player) ?? error("Couldn't find data!");
+  const clicker = ClickerMap.get(name) ?? error("Couldn't find clicker!");
 
   if (data.money < clicker.price) return false;
 
@@ -93,6 +81,36 @@ Remotes.Server.OnFunction("BuyClicker", (player: Player, name: string) => {
     bags: data.bags,
     clickers: [...data.clickers, clicker],
     equipped: data.equipped,
+  });
+
+  return true;
+});
+
+Remotes.Server.OnFunction("EquipBag", (player: Player, index: number) => {
+  const data = PlayerDataMap.get(player) ?? error("Couldn't find data!");
+  const bag = data.bags[index] ?? error("Bad index!");
+
+  PlayerDataMap.set(player, {
+    money: data.money,
+    clicks: data.clicks,
+    bags: data.bags,
+    clickers: data.clickers,
+    equipped: [bag, data.equipped[1]],
+  });
+
+  return true;
+});
+
+Remotes.Server.OnFunction("EquipClicker", (player: Player, index: number) => {
+  const data = PlayerDataMap.get(player) ?? error("Couldn't find data!");
+  const clicker = data.clickers[index] ?? error("Bad index!");
+
+  PlayerDataMap.set(player, {
+    money: data.money,
+    clicks: data.clicks,
+    bags: data.bags,
+    clickers: data.clickers,
+    equipped: [data.equipped[0], clicker],
   });
 
   return true;
