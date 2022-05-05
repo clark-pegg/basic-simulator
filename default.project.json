@@ -15,12 +15,6 @@
           "$path": "node_modules/@rbxts"
         }
       },
-      "networking": {
-        "$path": "out/networking",
-        "remotes": {
-          "$className": "Folder"
-        }
-      },
       "$path": "out/shared"
     },
     "StarterPlayer": {
