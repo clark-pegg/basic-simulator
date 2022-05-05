@@ -60,15 +60,35 @@ const SellComponent = () => (
   </frame>
 );
 
-const ShopComponent = () => {};
-const InventoryComponent = () => {};
-
 const playerGui = Players.LocalPlayer.WaitForChild("PlayerGui");
 
-Roact.mount(
+const ShopComponent = () => (
+  <frame Size={new UDim2(0.2, 0, 0.2, 0)} Position={new UDim2(0.8, 0, 0.6, 0)}>
+    <textbutton
+      Size={new UDim2(1, 0, 1, 0)}
+      Text={"Shop"}
+      Event={{
+        MouseButton1Click: async () => {
+          Roact.update(
+            handle,
+            <screengui>
+              {MoneyClicksComponent(money, clicks, maxClicks)}
+              {SellComponent()}
+            </screengui>
+          );
+        },
+      }}
+    ></textbutton>
+  </frame>
+);
+
+const handle = Roact.mount(
   <screengui>
     {MoneyClicksComponent(money, clicks, maxClicks)}
     {SellComponent()}
+    {ShopComponent()}
   </screengui>,
   playerGui
 );
+
+const InventoryComponent = () => {};
